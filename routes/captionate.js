@@ -36,14 +36,20 @@ function parseQuery(query) {
 /* GET users listing. */
 router.get('/', function(req, res) {
 
-    captionate(parseQuery(req.query))
+    try {
+        var query = parseQuery(req.query);
+    } catch (e) {
+        return res.send('Something went wrong with your configuration');
+    }
+
+    captionate(query)
         .then(function(buffer) {
             res.contentType('png');
-            res.end(buffer);
+            return res.end(buffer);
         })
         .catch(function(error) {
             console.log(error);
-            res.send(error.toString());
+            return res.send(error.toString());
         });
 });
 
